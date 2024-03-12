@@ -1,0 +1,9 @@
+{% extends 'doctor_dashboard.html' %}
+{% block content %}
+<h2>Update Patient Diagnosis</h2>
+<form method="post">
+    <label for="diagnosis">Diagnosis:</label>
+    <textarea name="diagnosis" id="diagnosis">{{ diagnosis }}</textarea>
+    <button type="submit">Update</button>
+</form>
+{% endblock %}

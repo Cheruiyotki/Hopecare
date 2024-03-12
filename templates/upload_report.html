@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Medical Report</title>
+</head>
+<body>
+    <h1>Upload Medical Report</h1>
+    <form method="POST" action="{{ url_for('upload_report', patient_id=patient.id) }}" enctype="multipart/form-data">
+        <label for="report">Medical Report:</label>
+        <input type="file" id="report" name="report" required>
+        <br>
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>

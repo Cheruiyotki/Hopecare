@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Dashboard</title>
+    <link rel="stylesheet" href="../static/patient.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Doctor Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('doctor_dashboard') }}">Home</a></li>
+                <li><a href="{{ url_for('view_patients') }}">Patients</a></li>
+                <li><a href="{{ url_for('view_appointments') }}">Appointments</a></li>
+                <li><a href="{{ url_for('patient/<int:patient_id>/diagnosis') }}">Update Patient</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+        <div id="content">
+            {% block content %}
+            <h1>Welcome, Dr. {{ session['doctor'] }}</h1>
+            <p>Here you can view and manage your patients, appointments, and other related activities.</p>
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>
