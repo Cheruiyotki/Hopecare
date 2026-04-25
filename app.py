@@ -321,5 +321,157 @@ def logout():
     session.pop('doctor', None)
     return redirect(url_for('home'))
 
+# Route for updating patient
+@app.route('/update_patient/<int:patient_id>', methods=['GET', 'POST'])
+def update_patient(patient_id):
+    if 'user_id' in session and session['user_type'] in ['doctor', 'admin']:
+        if request.method == 'POST':
+            name = request.form['name']
+            age = request.form['age']
+            query = "UPDATE patients SET name = %s, age = %s WHERE id = %s"
+            params = (name, age, patient_id)
+            execute_query(query, params)
+            flash('Patient updated successfully', 'success')
+            return redirect(url_for('view_patients'))
+        else:
+            query = "SELECT * FROM patients WHERE id = %s"
+            params = (patient_id,)
+            cur = execute_query(query, params)
+            if cur:
+                patient = cur.fetchone()
+                return render_template('update_patient.html', patient=patient)
+            else:
+                flash('Error fetching patient data', 'error')
+                return redirect(url_for('view_patients'))
+    else:
+        return redirect(url_for('login'))
+
+# Route for patient history
+@app.route('/patient_history/<int:patient_id>')
+def patient_history(patient_id):
+    if 'user_id' in session:
+        query = "SELECT * FROM patients WHERE id = %s"
+        params = (patient_id,)
+        cur = execute_query(query, params)
+        if cur:
+            patient = cur.fetchone()
+            return render_template('patient_history.html', patient=patient)
+        else:
+            flash('Error fetching patient data', 'error')
+            return redirect(url_for('login'))
+    else:
+        return redirect(url_for('login'))
+
+# Route for uploading patient report
+@app.route('/upload_report/<int:patient_id>', methods=['GET', 'POST'])
+def upload_report(patient_id):
+    if 'user_id' in session and session['user_type'] in ['patient', 'doctor', 'admin']:
+        if request.method == 'POST':
+            if 'report' in request.files:
+                report = request.files['report']
+                # In production, save the file and store the path
+                report_filename = report.filename
+                flash('Report uploaded successfully', 'success')
+                return redirect(url_for('patient_history', patient_id=patient_id))
+        query = "SELECT * FROM patients WHERE id = %s"
+        params = (patient_id,)
+        cur = execute_query(query, params)
+        if cur:
+            patient = cur.fetchone()
+            return render_template('upload_report.html', patient=patient)
+        else:
+            flash('Error fetching patient data', 'error')
+            return redirect(url_for('login'))
+    else:
+        return redirect(url_for('login'))
+
+# Route for updating diagnosis
+@app.route('/patient/<int:patient_id>/diagnosis', methods=['GET', 'POST'])
+def update_diagnosis(patient_id):
+    if 'user_id' in session and session['user_type'] in ['doctor', 'admin']:
+        if request.method == 'POST':
+            diagnosis = request.form['diagnosis']
+            query = "UPDATE patients SET diagnosis = %s WHERE id = %s"
+            params = (diagnosis, patient_id)
+            execute_query(query, params)
+            flash('Diagnosis updated successfully', 'success')
+            return redirect(url_for('view_patients'))
+        else:
+            query = "SELECT diagnosis FROM patients WHERE id = %s"
+            params = (patient_id,)
+            cur = execute_query(query, params)
+            if cur:
+                diagnosis = cur.fetchone()[0]
+                return render_template('update_diagnosis.html', patient_id=patient_id, diagnosis=diagnosis)
+            else:
+                flash('Error fetching patient diagnosis', 'error')
+                return redirect(url_for('view_patients'))
+    else:
+        return redirect(url_for('login'))
+
+# Route for viewing complaints
+@app.route('/view_complaints')
+def view_complaints():
+    if 'user_id' in session and session['user_type'] == 'admin':
+        complaints = fetch_complaints_from_database()
+        return render_template('view_complaints.html', complaints=complaints)
+    else:
+        return redirect(url_for('login'))
+
+def fetch_complaints_from_database():
+    query = "SELECT c.id, p.name AS patient_name, c.complaint_description, c.complaint_date, c.status " \
+            "FROM complaints c " \
+            "JOIN patients p ON c.patient_id = p.id"
+    cur = execute_query(query)
+    if cur:   
+        complaints = cur.fetchall()
+        return complaints
+    else:
+        return []
+
+# Route for viewing profile
+@app.route('/view_profile')
+def view_profile():
+    if 'user_id' in session and session['user_type'] == 'admin':
+        admin_profile = fetch_admin_profile_from_database(session['user_id'])
+        if admin_profile:
+            return render_template('view_profile.html', profile=admin_profile)
+        else:
+            flash('Error fetching admin profile', 'error')
+            return redirect(url_for('admin_dashboard'))
+    else:
+        return redirect(url_for('login'))
+
+def fetch_admin_profile_from_database(user_id):
+    query = "SELECT username, user_type FROM users WHERE id = %s"
+    params = (user_id,)
+    cur = execute_query(query, params)
+    if cur:
+        profile = cur.fetchone()
+        return profile
+    else:
+        return None
+
+# Route for editing profile
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    if 'user_id' in session and session['user_type'] == 'admin':
+        if request.method == 'POST':
+            username = request.form['username']
+            password = request.form['password']
+            query = "UPDATE users SET username = %s, password = %s WHERE id = %s"
+            params = (username, password, session['user_id'])
+            execute_query(query, params)
+            flash('Profile updated successfully', 'success')
+            return redirect(url_for('view_profile'))
+        admin_profile = fetch_admin_profile_from_database(session['user_id'])
+        if admin_profile:
+            return render_template('edit_profile.html', profile=admin_profile)
+        else:
+            flash('Error fetching admin profile', 'error')
+            return redirect(url_for('admin_dashboard'))
+    else:
+        return redirect(url_for('login'))
+
 if __name__ == '__main__':
     app.run(debug=True)
