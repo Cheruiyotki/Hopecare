@@ -2,27 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Doctor Dashboard</title>
-    <link rel="stylesheet" href="../static/patient.css">
+    <title>Doctor Dashboard - HopeCare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6767AC',
+                        secondary: '#4A90E2',
+                        action: '#5D5CDE',
+                        background: '#F8F9FF',
+                        typography: '#2D3436',
+                        success: '#55B985',
+                        accent: '#E0E7FF',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #FDFDFF 0%, #6767AC 100%);
+            min-height: 100vh;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Doctor Dashboard</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('doctor_dashboard') }}">Home</a></li>
-                <li><a href="{{ url_for('view_patients') }}">Patients</a></li>
-                <li><a href="{{ url_for('view_appointments') }}">Appointments</a></li>
-                <li><a href="{{ url_for('patient/<int:patient_id>/diagnosis') }}">Update Patient</a></li>
-                <li><a href="{{ url_for('logout') }}">Logout</a></li>
-            </ul>
-        </nav>
-        <div id="content">
-            {% block content %}
-            <h1>Welcome, Dr. {{ session['doctor'] }}</h1>
-            <p>Here you can view and manage your patients, appointments, and other related activities.</p>
-            {% endblock %}
+<body class="bg-background">
+
+    <!-- Sidebar -->
+    <div class="flex h-screen">
+        <div class="w-64 bg-white shadow-xl">
+            <div class="p-6">
+                <h2 class="text-3xl font-bold text-primary">HopeCare</h2>
+            </div>
+            <nav class="mt-6">
+                <a href="{{ url_for('doctor_dashboard') }}" class="flex items-center px-6 py-4 text-white bg-primary">
+                    <span class="font-semibold text-lg">Home</span>
+                </a>
+                <a href="{{ url_for('view_patients') }}" class="flex items-center px-6 py-4 text-typography hover:bg-accent transition">
+                    <span class="font-semibold text-lg">Patients</span>
+                </a>
+                <a href="{{ url_for('view_appointments') }}" class="flex items-center px-6 py-4 text-typography hover:bg-accent transition">
+                    <span class="font-semibold text-lg">Appointments</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="flex items-center px-6 py-4 text-red-600 hover:bg-red-50 transition">
+                    <span class="font-semibold text-lg">Logout</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-8">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                {% block content %}
+                <h1 class="text-3xl font-bold text-primary mb-6">Welcome, Dr. {{ session['doctor'] }}</h1>
+                <p class="text-typography text-xl">Here you can view and manage your patients, appointments, and other related activities.</p>
+                {% endblock %}
+            </div>
         </div>
     </div>
+
 </body>
 </html>

@@ -1,22 +1,24 @@
 {% extends 'doctor_dashboard.html' %}
 {% block content %}
-<h2>Appointments</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Patient Name</th>
-            <th>Appointment Date</th>
-            <th>Appointment Time</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for appointment in appointments %}
-        <tr>
-            <td>{{ appointment.patient_name }}</td>
-            <td>{{ appointment.appointment_date }}</td>
-            <td>{{ appointment.appointment_time }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<h2 class="text-3xl font-bold text-primary mb-8">Patients</h2>
+<div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+    <table class="w-full text-left">
+        <thead>
+            <tr class="bg-primary text-white">
+                <th class="px-6 py-4">Patient Name</th>
+                <th class="px-6 py-4">Appointment Date</th>
+                <th class="px-6 py-4">Appointment Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+            <tr class="border-b border-gray-200 hover:bg-accent transition">
+                <td class="px-6 py-4 text-typography font-semibold">{{ appointment.patient_name }}</td>
+                <td class="px-6 py-4 text-typography">{{ appointment.appointment_date }}</td>
+                <td class="px-6 py-4 text-typography">{{ appointment.appointment_time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

@@ -2,27 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="../static/login.css">
+    <title>Login - HopeCare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6767AC',
+                        secondary: '#4A90E2',
+                        action: '#5D5CDE',
+                        background: '#F8F9FF',
+                        typography: '#2D3436',
+                        success: '#55B985',
+                        accent: '#E0E7FF',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #FDFDFF 0%, #6767AC 100%);
+            min-height: 100vh;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Login</h1>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="{{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        <form method="post" action="{{ url_for('login') }}">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></p>
+<body class="flex items-center justify-center">
+
+    <div class="w-full max-w-md">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <h1 class="text-4xl font-bold text-primary mb-8 text-center">Login</h1>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="mb-4 p-4 rounded-xl {% if category == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <form method="post" action="{{ url_for('login') }}">
+                <div class="mb-6">
+                    <label for="username" class="block text-typography font-semibold mb-2">Username:</label>
+                    <input type="text" id="username" name="username" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:outline-none bg-white text-typography" required>
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="block text-typography font-semibold mb-2">Password:</label>
+                    <input type="password" id="password" name="password" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:outline-none bg-white text-typography" required>
+                </div>
+                <button type="submit" class="w-full bg-action text-white px-6 py-3 rounded-xl font-semibold text-lg hover:bg-primary transition shadow-lg">
+                    Login
+                </button>
+            </form>
+            <p class="mt-6 text-center text-typography">Don't have an account? <a href="{{ url_for('signup') }}" class="text-primary hover:text-action font-semibold">Sign up</a></p>
+        </div>
     </div>
+
 </body>
 </html>

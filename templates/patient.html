@@ -3,21 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Portal</title>
-    <link rel="stylesheet" href="../static/patient.css">
+    <title>Patient Portal - HopeCare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6767AC',
+                        secondary: '#4A90E2',
+                        action: '#5D5CDE',
+                        background: '#F8F9FF',
+                        typography: '#2D3436',
+                        success: '#55B985',
+                        accent: '#E0E7FF',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #FDFDFF 0%, #6767AC 100%);
+            min-height: 100vh;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Patient Portal</h1>
-        <nav>
-            <ul>
-                <li><a href="#" data-section="profile">View Profile</a></li>
-                <li><a href="#" data-section="doctors">View Cancer Doctors</a></li>
-                <li><a href="#" data-section="appointments">Manage Appointments</a></li>
-                <li><a href="#" data-section="reports">Download Medical Reports</a></li>
-            </ul>
-        </nav>
-        <div id="content"></div>
+<body class="bg-background">
+
+    <!-- Sidebar -->
+    <div class="flex h-screen">
+        <div class="w-64 bg-white shadow-xl">
+            <div class="p-6">
+                <h2 class="text-3xl font-bold text-primary">HopeCare</h2>
+            </div>
+            <nav class="mt-6">
+                <a href="#" data-section="profile" class="flex items-center px-6 py-4 text-typography hover:bg-accent transition">
+                    <span class="font-semibold text-lg">View Profile</span>
+                </a>
+                <a href="#" data-section="doctors" class="flex items-center px-6 py-4 text-typography hover:bg-accent transition">
+                    <span class="font-semibold text-lg">View Cancer Doctors</span>
+                </a>
+                <a href="#" data-section="appointments" class="flex items-center px-6 py-4 text-typography hover:bg-accent transition">
+                    <span class="font-semibold text-lg">Manage Appointments</span>
+                </a>
+                <a href="#" data-section="reports" class="flex items-center px-6 py-4 text-typography hover:bg-accent transition">
+                    <span class="font-semibold text-lg">Download Medical Reports</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="flex items-center px-6 py-4 text-red-600 hover:bg-red-50 transition">
+                    <span class="font-semibold text-lg">Logout</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-8">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h1 class="text-3xl font-bold text-primary mb-6">Patient Portal</h1>
+                <div id="content"></div>
+            </div>
+        </div>
     </div>
 
     <script src="../static/patient.js"></script>

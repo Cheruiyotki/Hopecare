@@ -2,29 +2,75 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="../static/patient.css">
+    <title>Admin Dashboard - HopeCare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6767AC',
+                        secondary: '#4A90E2',
+                        action: '#5D5CDE',
+                        background: '#F8F9FF',
+                        typography: '#2D3436',
+                        success: '#55B985',
+                        accent: '#E0E7FF',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #FDFDFF 0%, #6767AC 100%);
+            min-height: 100vh;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Admin Dashboard</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('admin_dashboard') }}">Home</a></li>
-                <li><a href="{{ url_for('manage_users') }}">Manage Users</a></li>
-                <li><a href="{{ url_for('view_appointments') }}">View Appointments</a></li>
-                <li><a href="{{ url_for('view_profile') }}">View Profile</a></li>
-                <li><a href="{{ url_for('edit_profile') }}">Edit Profile</a></li>
-                <li><a href="{{ url_for('view_complaints') }}">View Complaints</a></li>
-                <li><a href="{{ url_for('logout') }}">Logout</a></li>
-            </ul>
-        </nav>
-        <div id="content">
-            {% block content %}
-            <h2>Welcome, Admin!</h2>
-            <p>You can manage users, appointments, and view complaints from here.</p>
-            {% endblock %}
+<body class="bg-background">
+
+    <!-- Sidebar -->
+    <div class="flex h-screen">
+        <div class="w-64 bg-white shadow-xl">
+            <div class="p-6">
+                <h2 class="text-3xl font-bold text-primary">HopeCare</h2>
+            </div>
+            <nav class="mt-6">
+                <a href="{{ url_for('admin_dashboard') }}" class="flex items-center px-6 py-4 text-white bg-primary">
+                    <span class="font-semibold text-lg">Home</span>
+                </a>
+                <a href="{{ url_for('manage_users') }}" class="flex items-center px-6 py-4 text-typography hover:bg-accent transition">
+                    <span class="font-semibold text-lg">Manage Users</span>
+                </a>
+                <a href="{{ url_for('view_appointments') }}" class="flex items-center px-6 py-4 text-typography hover:bg-accent transition">
+                    <span class="font-semibold text-lg">View Appointments</span>
+                </a>
+                <a href="{{ url_for('view_profile') }}" class="flex items-center px-6 py-4 text-typography hover:bg-accent transition">
+                    <span class="font-semibold text-lg">View Profile</span>
+                </a>
+                <a href="{{ url_for('edit_profile') }}" class="flex items-center px-6 py-4 text-typography hover:bg-accent transition">
+                    <span class="font-semibold text-lg">Edit Profile</span>
+                </a>
+                <a href="{{ url_for('view_complaints') }}" class="flex items-center px-6 py-4 text-typography hover:bg-accent transition">
+                    <span class="font-semibold text-lg">View Complaints</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="flex items-center px-6 py-4 text-red-600 hover:bg-red-50 transition">
+                    <span class="font-semibold text-lg">Logout</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-8">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                {% block content %}
+                <h2 class="text-3xl font-bold text-primary mb-6">Welcome, Admin!</h2>
+                <p class="text-typography text-xl">You can manage users, appointments, and view complaints from here.</p>
+                {% endblock %}
+            </div>
         </div>
     </div>
+
 </body>
 </html>
